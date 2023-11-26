@@ -30,8 +30,8 @@ def capture_window(title):
         window = gw.getWindowsWithTitle(title)[0]
 
         # 獲取窗口句柄
-        hwnd = win32gui.FindWindow(None, window.title)
-
+        hwnd = win32gui.FindWindow(None, window.title) 
+    
         # 獲取窗口DC
         wDC = win32gui.GetWindowDC(hwnd)
         dcObj = win32ui.CreateDCFromHandle(wDC)
@@ -170,7 +170,7 @@ if(__name__=='__main__'):
         if screenshot:
             #chat area
             left = 0
-            top = screenshot.height - screenshot.height // 6.1
+            top = screenshot.height - screenshot.height // 5.3
             right = int(screenshot.width / 4)
             bottom = screenshot.height*9.2//10
             cropped_image = screenshot.crop((left, top, right, bottom))
