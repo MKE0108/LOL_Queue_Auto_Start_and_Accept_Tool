@@ -159,6 +159,7 @@ def Check(player_List):
     return 1
 
 if(__name__=='__main__'):
+    lastMsg=""
     init("config.json")
     Status="Checking"
     while(1):
@@ -182,8 +183,13 @@ if(__name__=='__main__'):
             # print("text:")
             # print(line)
             update(player_List,line)
+            tmpMsg=""
             for player in player_List:
-                print(f'{player["name"]}->{player["status"]}')
+                tmpMsg+=f'{player["name"]}->{player["status"  ]}\n'
+            if(tmpMsg!=lastMsg):
+                print("!!!update!!!")
+                print(tmpMsg)
+                lastMsg=tmpMsg
             if(Check(player_List)):
                 Status="Checking"
                 touch("League of Legends",0.42,0.95)
