@@ -1,6 +1,10 @@
 # LOL QUICKPLAY MODE Auto Start
 # Quick start
 ## 1. open powershell
+```bash
+cd C:\Users\user\Desktop
+git clone git@github.com:MKE0108/LOL_NG_auto_Start.git
+```
 ## 2. Downlond python 3.10
 ## 3. Press this in powershell
 ```bash
