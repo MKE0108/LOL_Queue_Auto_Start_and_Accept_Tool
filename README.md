@@ -1,4 +1,6 @@
 # LOL QUICKPLAY MODE Auto Start
+# Demo Video
+
 # Quick start
 ## 1. open powershell
 ```bash
