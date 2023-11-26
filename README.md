@@ -2,7 +2,7 @@
 # Demo Video
 
 # Quick start
-## 1. open powershell
+## 1. Open powershell
 ```bash
 cd C:\Users\user\Desktop
 git clone git@github.com:MKE0108/LOL_QUICKPLAY_MODE_Auto_Start.git
