@@ -3,17 +3,19 @@
 ## 1. open powershell
 ```bash
 cd C:\Users\user\Desktop
-git clone git@github.com:MKE0108/LOL_NG_auto_Start.git
+git clone git@github.com:MKE0108/LOL_QUICKPLAY_MODE_Auto_Start.git
 ```
+Then you will find a new folder in your Desktop　^_^
 ## 2. Downlond python 3.10
 ## 3. Press this in powershell
 ```bash
-pip install -r requirement.txt
+cd C:\Users\user\Desktop\LOL_QUICKPLAY_MODE_Auto_Start #Your absolute path of this folder
 ```
 ## 4. Press this in powershell
 ```bash
-cd C:\Users\user\Documents\LOL_NG_auto_Start #Your absolute path of this folder
+pip install -r requirement.txt
 ```
+
 ## 5. Download Tesseract & Set environment path  
 ref : https://linuxhint.com/install-tesseract-windows/  
 ### Important
