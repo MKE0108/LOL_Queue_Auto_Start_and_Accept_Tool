@@ -1,0 +1,7 @@
+pygetwindow
+pywin32
+Pillow
+pytesseract
+numpy
+pyautogui
+Levenshtein
