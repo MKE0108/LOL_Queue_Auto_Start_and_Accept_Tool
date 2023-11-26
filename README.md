@@ -1,4 +1,4 @@
-# LOL 快打模式 自動開始
+# LOL QUICKPLAY MODE Auto Start
 # Quick start
 ##1. open powershell
 ##2. Downlond python 3.10
