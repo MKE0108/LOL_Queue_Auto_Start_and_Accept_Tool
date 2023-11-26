@@ -8,7 +8,9 @@ cd C:\Users\user\Desktop
 git clone git@github.com:MKE0108/LOL_QUICKPLAY_MODE_Auto_Start.git
 ```
 Then you will find a new folder in your Desktop　^_^
-## 2. Downlond python 3.10
+## 2. Downlond python 3.10 and pip
+ref: https://www.youtube.com/watch?v=FYkOr_7hOXw
+Or Google or GPT ^_^
 ## 3. Enter in powershell
 ```bash
 cd C:\Users\user\Desktop\LOL_QUICKPLAY_MODE_Auto_Start #Your absolute path of this folder
