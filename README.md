@@ -26,7 +26,7 @@ Choose the language pack you need. e.g. traditional Chinese
 if you don't choose traditional Chinese, you need to edit config.json.
 ```json
 {
-    "lang" : "cha-tra" <- edit here
+    "lang" : "chi_tra" <- edit here
 }
 ```
 
