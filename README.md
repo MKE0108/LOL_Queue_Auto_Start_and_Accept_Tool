@@ -30,7 +30,7 @@ if you don't choose traditional Chinese, you need to edit config.json.
 }
 ```
 
-## 6. Press this in powershell
+## 6. Enter in powershell
 ```bash
 python run.py # or python3 run.py
 ```
