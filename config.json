@@ -1,4 +1,5 @@
 {
-    "ready":["OK","K"],
-    "unready":["NO","N"]
+    "ready":["OK","K","98","GO"],
+    "unready":["NO","N"],
+    "lang" : "cha-tra"
 }

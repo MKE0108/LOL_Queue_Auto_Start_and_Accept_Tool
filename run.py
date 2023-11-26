@@ -7,11 +7,14 @@ from PIL import Image
 import pytesseract
 import numpy as np
 import pyautogui
-
-
+import os
+import sys
+import time
+import shutil
+import keyboard
 ready_words=None
 unready_words=None
-
+langPack=None
 
 import json
 
@@ -21,7 +24,7 @@ def init(json_file):
         data = json.load(file)
         ready_words = tuple(data["ready"])
         unready_words = tuple(data["unready"])
-
+        langPack = data["lang"]
 
 
 def capture_window(title):
@@ -63,7 +66,7 @@ def capture_window(title):
         return im
 
     except Exception as e:
-        print(f"無法截取 {title}: {e}")
+        print(f"Crop {title} image error!!!: {e}")
         return None
 
 
@@ -105,7 +108,6 @@ def click_relative(window_title, relative_rx, relative_ry):
 def touch(windows,rx,ry):
     bring_to_foreground(windows)
     click_relative(windows,rx, ry)
-    print("Start!!!!")
 
 
 import Levenshtein
@@ -136,30 +138,86 @@ def update(player_list, data):
         if similar_player is not None:
             # 更新已有玩家的状态
             if any(substring.upper() in msg.upper() for substring in ready_words):
-                similar_player['status'] = 1 
+                similar_player['status'] = "ready"
             if any(substring.upper() in msg.upper() for substring in unready_words):
-                similar_player['status'] = 0
+                similar_player['status'] = "unready"
         else:
             # 添加新玩家
             if any(substring.upper() in msg.upper() for substring in ready_words):
-                new_status = 1 
+                new_status = "ready" 
             else:
-                new_status=0
+                new_status="unready"
             new_player = {'name': name, 'status': new_status}
             player_list.append(new_player)
 
+
+# 定義一個函數來清除終端屏幕
+def clear_screen():
+    # 對於Windows
+    if os.name == 'nt':
+        _ = os.system('cls')
+    # 對於mac和linux(here, os.name is 'posix')
+    else:
+        _ = os.system('clear')
+import unicodedata
+def visual_length(s):
+    return sum(2 if unicodedata.east_asian_width(c) in 'WF' else 1 for c in s)
+
+def format_player_info(name, status, name_width, status_width):
+    total_width = name_width + status_width + 4  # 包括 " -> " 和两边空格
+    visual_len = visual_length(name) + visual_length(status)
+    padding = total_width - visual_len
+    return ' ' * (padding // 2) + f'{name} -> {status}' + ' ' * (padding - padding // 2)
+
+
+def print_full_width(text, fill_char='_'):
+    # 获取终端的宽度
+    terminal_width, _ = shutil.get_terminal_size((80, 20))  # 默认值为80x20
+
+    # 计算需要填充的字符数量
+    text_length = len(text.encode('utf-8'))  # 为了正确处理中文字符
+    padding_length = (terminal_width - text_length) // 2 - 1  # 减1是为了在另一边也有填充
+
+    # 构造并打印填满整行的字符串
+    full_width_str = fill_char * padding_length + text + fill_char * padding_length
+    print(full_width_str)
+
+
+def update_terminal(player_list):
+    clear_screen()
+    if not player_list:
+        print_full_width(" [No Player @_@] ")
+    else:
+        
+        name_width = 15
+        status_width = 8
+        print_full_width(f" Queue Waiting / number of player : {num_of_player}  ")
+        print("")
+        for i in range(0, len(player_list), 3):
+            players_in_row = player_list[i:i + 3]
+
+            row_parts = [format_player_info(player["name"], player["status"], name_width, status_width) for player in players_in_row]
+
+            # while len(row_parts) < 3:
+            #     row_parts.append(' ' * (name_width + status_width + 8))
+
+            row_str = ' | '.join(row_parts)
+            print(row_str)
+        print("")
+        print_full_width(f" [Press ESC to exit.] ")
+    sys.stdout.flush()
 
 
 def Check(player_List):
     if(len(player_List)!=num_of_player):
         return 0
     for player in player_List:
-        if(not player['status']):
+        if(player['status']=="unready"):
             return 0
     return 1
 
 if(__name__=='__main__'):
-    lastMsg=""
+    
     init("config.json")
     Status="Checking"
     while(1):
@@ -168,6 +226,8 @@ if(__name__=='__main__'):
             num_of_player=int(input("num of player?"))
             Status="waiting"
         screenshot=capture_window("League of Legends")
+        if keyboard.is_pressed('esc'):
+            Status = "Checking"
         if screenshot:
             #chat area
             left = 0
@@ -178,21 +238,17 @@ if(__name__=='__main__'):
 
             cropped_image.save('crop.png')
             # pytesseract OCR
-            text = pytesseract.image_to_string(cropped_image,lang='chi_tra')
+            text = pytesseract.image_to_string(cropped_image,lang=langPack)
             line=[txt for txt in text.split("\n") if len(txt)!=0]
-            # print("text:")
-            # print(line)
+
             update(player_List,line)
-            tmpMsg=""
-            for player in player_List:
-                tmpMsg+=f'{player["name"]}->{player["status"  ]}\n'
-            if(tmpMsg!=lastMsg):
-                print("!!!update!!!")
-                print(tmpMsg)
-                lastMsg=tmpMsg
+            update_terminal(player_List)
             if(Check(player_List)):
                 Status="Checking"
                 touch("League of Legends",0.42,0.95)
+                print_full_width("Game start!!!")
+                time.sleep(2)
+                clear_screen()
         else:
             Status="Checking"
 

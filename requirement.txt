@@ -5,3 +5,4 @@ pytesseract
 numpy
 pyautogui
 Levenshtein
+keyboard
