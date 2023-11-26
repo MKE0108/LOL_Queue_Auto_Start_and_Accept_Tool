@@ -19,7 +19,7 @@ langPack=None
 import json
 
 def init(json_file):
-    global ready_words,unready_words
+    global ready_words,unready_words,langPack
     with open(json_file, 'r') as file:
         data = json.load(file)
         ready_words = tuple(data["ready"])
@@ -66,7 +66,8 @@ def capture_window(title):
         return im
 
     except Exception as e:
-        print(f"Crop {title} image error!!!: {e}")
+        print(f"Cropping {title} image error!!!: {e}")
+        time.sleep(3)
         return None
 
 
@@ -203,8 +204,8 @@ def update_terminal(player_list):
 
             row_str = ' | '.join(row_parts)
             print(row_str)
-        print("")
-        print_full_width(f" [Press ESC to exit.] ")
+    print("")
+    print_full_width(f" [Press ESC to exit.] ")
     sys.stdout.flush()
 
 
@@ -222,8 +223,9 @@ if(__name__=='__main__'):
     Status="Checking"
     while(1):
         if(Status=="Checking"):
+            clear_screen()
             player_List=[]
-            num_of_player=int(input("num of player?"))
+            num_of_player=int(input("num of player:"))
             Status="waiting"
         screenshot=capture_window("League of Legends")
         if keyboard.is_pressed('esc'):
@@ -248,7 +250,6 @@ if(__name__=='__main__'):
                 touch("League of Legends",0.42,0.95)
                 print_full_width("Game start!!!")
                 time.sleep(2)
-                clear_screen()
         else:
             Status="Checking"
 
