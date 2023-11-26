@@ -13,8 +13,8 @@ cd C:\Users\user\Documents\LOL_NG_auto_Start #Your absolute path of this folder
 5. Download Tesseract & Set environment path  
 ref : https://linuxhint.com/install-tesseract-windows/  
 ### Important
-Choose the language pack you need. e.g. traditional Chinese
-['image'] (https://linuxhint.com/wp-content/uploads/2022/09/How-to-Install-Tesseract-on-Windows-8.png)  
+Choose the language pack you need. e.g. traditional Chinese  
+!['image'] (https://linuxhint.com/wp-content/uploads/2022/09/How-to-Install-Tesseract-on-Windows-8.png)  
 if you don't choose traditional Chinese, you need to edit config.json.
 ```json
 {
