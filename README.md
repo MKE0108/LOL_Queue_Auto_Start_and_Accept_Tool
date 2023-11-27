@@ -12,7 +12,8 @@ null
 ref : https://linuxhint.com/install-tesseract-windows/  
 ### Important
 Choose the language pack you need. e.g. traditional Chinese  
-![](https://github.com/MKE0108/LOL_NG_auto_Start/blob/main/readme/image1.jpg)  
+![](https://github.com/MKE0108/LOL_NG_auto_Start/blob/main/readme/image1.png)
+![](https://github.com/MKE0108/LOL_NG_auto_Start/blob/main/readme/image2.png)  
 if you don't choose traditional Chinese, you need to edit config.json.
 ```json
 {
