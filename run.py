@@ -218,38 +218,41 @@ def Check(player_List):
     return 1
 
 if(__name__=='__main__'):
-    
-    init("config.json")
-    Status="Checking"
-    while(1):
-        if(Status=="Checking"):
-            clear_screen()
-            player_List=[]
-            num_of_player=int(input("num of player:"))
-            Status="waiting"
-        screenshot=capture_window("League of Legends")
-        if keyboard.is_pressed('esc'):
-            Status = "Checking"
-        if screenshot:
-            #chat area
-            left = 0
-            top = screenshot.height - screenshot.height // 5.3
-            right = int(screenshot.width / 4)
-            bottom = screenshot.height*9.2//10
-            cropped_image = screenshot.crop((left, top, right, bottom))
+    try:
+        init("config.json")
+        Status="Checking"
+        while(1):
+            if(Status=="Checking"):
+                clear_screen()
+                player_List=[]
+                num_of_player=int(input("num of player:"))
+                Status="waiting"
+            screenshot=capture_window("League of Legends")
+            if keyboard.is_pressed('esc'):
+                Status = "Checking"
+            if screenshot:
+                #chat area
+                left = 0
+                top = screenshot.height - screenshot.height // 5.3
+                right = int(screenshot.width / 4)
+                bottom = screenshot.height*9.2//10
+                cropped_image = screenshot.crop((left, top, right, bottom))
 
-            cropped_image.save('crop.png')
-            # pytesseract OCR
-            text = pytesseract.image_to_string(cropped_image,lang=langPack)
-            line=[txt for txt in text.split("\n") if len(txt)!=0]
+                cropped_image.save('crop.png')
+                # pytesseract OCR
+                text = pytesseract.image_to_string(cropped_image,lang=langPack)
+                line=[txt for txt in text.split("\n") if len(txt)!=0]
 
-            update(player_List,line)
-            update_terminal(player_List)
-            if(Check(player_List)):
+                update(player_List,line)
+                update_terminal(player_List)
+                if(Check(player_List)):
+                    Status="Checking"
+                    touch("League of Legends",0.42,0.95)
+                    print_full_width("Game start!!!")
+                    time.sleep(2)
+            else:
                 Status="Checking"
-                touch("League of Legends",0.42,0.95)
-                print_full_width("Game start!!!")
-                time.sleep(2)
-        else:
-            Status="Checking"
+    except Exception as e:
+        print(f"Error info->{e}")
+        time.sleep(10)
 
