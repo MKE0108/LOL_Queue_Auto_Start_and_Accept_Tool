@@ -4,26 +4,8 @@ null
 
 
 
-#Qucik start
-## 1.  Download Release
-
-
-## 2. Download Tesseract & Set environment path  
-ref : https://linuxhint.com/install-tesseract-windows/  
-### Important
-Choose the language pack you need. e.g. traditional Chinese  
-![](https://github.com/MKE0108/LOL_NG_auto_Start/blob/main/readme/image1.png)
-![](https://github.com/MKE0108/LOL_NG_auto_Start/blob/main/readme/image2.png)  
-if you don't choose traditional Chinese, you need to edit config.json.
-```json
-{
-    "lang" : "chi_tra" <- edit here
-}
-```
-## 3.  Run run.exe
-
-
-
+# Qucik start
+Download [Release v1](https://github.com/MKE0108/LOL_QUICKPLAY_MODE_Auto_Start/releases )
 
 
 # Edit and run code
