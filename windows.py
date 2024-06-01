@@ -7,8 +7,7 @@ from PIL import Image
 import pyautogui
 import time
 import numpy as np
-
-
+import cv2
 def capture_window(title):
     try:
         bring_to_foreground(title)
@@ -45,32 +44,29 @@ def capture_window(title):
         win32gui.ReleaseDC(hwnd, wDC)
         win32gui.DeleteObject(dataBitMap.GetHandle())
         
-        return np.array(im)
+        return cv2.cvtColor(np.array(im), cv2.COLOR_RGB2BGR)
 
     except Exception as e:
         print(f"Cropping {title} image error!!!: {e}")
         time.sleep(3)
         return None
-    
+
+
+def bring_to_foreground_force(window_title):
+    handle = win32gui.FindWindow(None, window_title)
+    if handle == 0 :
+        print(f"No window with title {window_title} found.")
+        return
+    win32gui.ShowWindow(handle, win32con.SW_NORMAL)
+    win32gui.SetForegroundWindow(handle)
 
 
 def bring_to_foreground(window_title):
-    # 定义一个回调函数，用于枚举窗口
-    def enum_window_callback(hwnd, data):
-        if win32gui.IsWindowVisible(hwnd) and win32gui.GetWindowText(hwnd) == window_title:
-            data.append(hwnd)
-
-    # 枚举所有窗口，寻找匹配的窗口标题
-    handles = []
-    win32gui.EnumWindows(enum_window_callback, handles)
-
-    # 如果找到了窗口，将其置于最前台
-    if handles:
-        win32gui.ShowWindow(handles[0], win32con.SW_RESTORE)  # 恢复窗口（如果最小化）
-        # win32gui.SetForegroundWindow(handles[0])
-    else:
-        print(f"No window with title '{window_title}' found.")
-
+    handle = win32gui.FindWindow(None, window_title)
+    if handle == 0 :
+        print(f"No window with title {window_title} found.")
+        return
+    win32gui.ShowWindow(handle, win32con.SW_NORMAL)
 
 def get_window_position(window_title):
     try:
@@ -90,6 +86,6 @@ def click_relative(window_title, relative_rx, relative_ry):
         pyautogui.click(x1+w*relative_rx, y1+h*relative_ry)
 
 def touch(windows,rx,ry):
-    bring_to_foreground(windows)
+    bring_to_foreground_force(windows)
     click_relative(windows,rx, ry)
 

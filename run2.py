@@ -32,23 +32,22 @@ def get_current_player(img:np.array):
     _,img = cv2.threshold(img, 170, 255, cv2.THRESH_BINARY)
     #find current player
     players = []
-    positions = [[655/1920,550/1080,275/1920,45/1080],[370/1920,525/1080,275/1920,45/1080]]
+    positions = [[655/1920,550/1080,275/1920,45/1080],
+                 [370/1920,525/1080,275/1920,45/1080],
+                 [(370+(370-675))/1920,525/1080,275/1920,45/1080],
+                 [962/1920,525/1080,275/1920,45/1080],
+                 [(962+(962-665))/1920,525/1080,275/1920,45/1080],
+                 ]
     for p in positions:
         x,y,w,h = p
         text = pytesseract.image_to_string(img[int(y*img.shape[0]):int((y+h)*img.shape[0]),int(x*img.shape[1]):int((x+w)*img.shape[1])],lang=langPack)
-        player=[txt for txt in text.split("\n") if len(txt)!=0]
-        # text=ocr.ocr(img[int(y*img.shape[0]):int((y+h)*img.shape[0]),
-        #                  int(x*img.shape[1]):int((x+w)*img.shape[1])])
-        # player=[txt[1][0] for txt in text[0] if len(txt)!=0]
-        players.append(player[0])
+        player=[txt.strip() for txt in text.split("\n") if len(txt.strip())!=0]
+        if(len(player)!=0):
+            players.append(player[0])
     return players
 
 def get_chat_message(screenshot:np.array):
     #chat area
-    # left = 0
-    # top = screenshot.height - screenshot.height // 5.3
-    # right = int(screenshot.width / 4)
-    # bottom = screenshot.height*9.2//10
     left = 0
     top = screenshot.shape[0] - screenshot.shape[0] // 5.3
     right = int(screenshot.shape[1] / 4)
@@ -58,7 +57,7 @@ def get_chat_message(screenshot:np.array):
     cropped_image=cv2.cvtColor(cropped_image, cv2.COLOR_BGR2GRAY)
     # pytesseract OCR
     text = pytesseract.image_to_string(cropped_image,lang=langPack,config='--psm 6')
-    line=[txt for txt in text.split("\n") if len(txt)!=0]
+    line=[txt.strip() for txt in text.split("\n") if len(txt.strip())!=0]
     return line
 
 def update(player_list, data):
@@ -71,20 +70,12 @@ def update(player_list, data):
             continue
         name="#".join(name.split('#')[:-1])
         similar_player = find_similar_name_from_list(name, [p['name'] for p in  player_list])
-        if similar_player:
-            for player in player_list:
-                if player['name'] == similar_player:
-                    if any(word in msg.strip() for word in ready_words):
-                        player['status'] = 'ready'
-                    elif any(word in msg.strip() for word in unready_words):
-                        player['status'] = 'unready'
-                    break
-def on_press(key):
-    global running
-    if key == keyboard.Key.s:
-        running = True
-    elif key == keyboard.Key.e:
-        running = False
+        player = next((player for player in player_list if player['name'] == similar_player), None)
+        if player:
+            if any(word in msg for word in ready_words):
+                player['status'] = 'ready'
+            elif any(word in msg for word in unready_words):
+                player['status'] = 'unready'
 
 def on_press(e):
     global running
@@ -102,10 +93,13 @@ if(__name__=='__main__'):
         player_list=[]
         while(1):
             if running:
-                players=get_current_player(cv2.imread("2player.png"))
+                players=get_current_player(capture_window("League of Legends"))
                 for player in players:
                     if player not in [p['name'] for p in player_list]:
                         player_list.append({"name":player,"status":"unready"})
+                for player in player_list:
+                    if player['name'] not in players:
+                        player_list.remove(player)
                 msg=get_chat_message(capture_window("League of Legends"))
                 time.sleep(0.5)
                 update(player_list,msg)
