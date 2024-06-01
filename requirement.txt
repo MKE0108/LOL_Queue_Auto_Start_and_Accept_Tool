@@ -1,8 +1,11 @@
 pygetwindow
 pywin32
 Pillow
-pytesseract
 numpy
 pyautogui
 Levenshtein
 keyboard
+opencv-python
+paddlepaddle
+pytesseract
+PaddleOCR
