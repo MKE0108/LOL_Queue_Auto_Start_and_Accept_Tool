@@ -7,49 +7,45 @@ from PIL import Image
 import pyautogui
 import time
 import numpy as np
-import cv2
+from cv2 import cvtColor, COLOR_RGB2BGR
 def capture_window(title):
-    try:
-        bring_to_foreground(title)
-        # 使用pygetwindow找到窗口
-        window = gw.getWindowsWithTitle(title)[0]
+    bring_to_foreground(title)
+    # 使用pygetwindow找到窗口
+    window = gw.getWindowsWithTitle(title)[0]
 
-        # 獲取窗口句柄
-        hwnd = win32gui.FindWindow(None, window.title) 
+    # 獲取窗口句柄
+    hwnd = win32gui.FindWindow(None, window.title) 
+
+    # 獲取窗口DC
+    wDC = win32gui.GetWindowDC(hwnd)
+    dcObj = win32ui.CreateDCFromHandle(wDC)
+    cDC = dcObj.CreateCompatibleDC()
+
+    # 創建位圖
+    dataBitMap = win32ui.CreateBitmap()
+    dataBitMap.CreateCompatibleBitmap(dcObj, window.width, window.height)
+    cDC.SelectObject(dataBitMap)
+
+    # 從窗口DC複製圖像
+    cDC.BitBlt((0, 0), (window.width, window.height), dcObj, (0, 0), win32con.SRCCOPY)
+
+    # 將位圖轉換為PIL圖像
+    bmpinfo = dataBitMap.GetInfo()
+    bmpstr = dataBitMap.GetBitmapBits(True)
+    im = Image.frombuffer(
+        'RGB',
+        (bmpinfo['bmWidth'], bmpinfo['bmHeight']),
+        bmpstr, 'raw', 'BGRX', 0, 1)
+    #to cv2
+    # 清理
+    dcObj.DeleteDC()
+    cDC.DeleteDC()
+    win32gui.ReleaseDC(hwnd, wDC)
+    win32gui.DeleteObject(dataBitMap.GetHandle())
     
-        # 獲取窗口DC
-        wDC = win32gui.GetWindowDC(hwnd)
-        dcObj = win32ui.CreateDCFromHandle(wDC)
-        cDC = dcObj.CreateCompatibleDC()
+    return cvtColor(np.array(im), COLOR_RGB2BGR)
 
-        # 創建位圖
-        dataBitMap = win32ui.CreateBitmap()
-        dataBitMap.CreateCompatibleBitmap(dcObj, window.width, window.height)
-        cDC.SelectObject(dataBitMap)
 
-        # 從窗口DC複製圖像
-        cDC.BitBlt((0, 0), (window.width, window.height), dcObj, (0, 0), win32con.SRCCOPY)
-
-        # 將位圖轉換為PIL圖像
-        bmpinfo = dataBitMap.GetInfo()
-        bmpstr = dataBitMap.GetBitmapBits(True)
-        im = Image.frombuffer(
-            'RGB',
-            (bmpinfo['bmWidth'], bmpinfo['bmHeight']),
-            bmpstr, 'raw', 'BGRX', 0, 1)
-        #to cv2
-        # 清理
-        dcObj.DeleteDC()
-        cDC.DeleteDC()
-        win32gui.ReleaseDC(hwnd, wDC)
-        win32gui.DeleteObject(dataBitMap.GetHandle())
-        
-        return cv2.cvtColor(np.array(im), cv2.COLOR_RGB2BGR)
-
-    except Exception as e:
-        print(f"Cropping {title} image error!!!: {e}")
-        time.sleep(3)
-        return None
 
 
 def bring_to_foreground_force(window_title):

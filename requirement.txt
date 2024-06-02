@@ -6,6 +6,7 @@ pyautogui
 Levenshtein
 keyboard
 opencv-python
-paddlepaddle
 pytesseract
-PaddleOCR
+windows-curses
+scikit-image
+

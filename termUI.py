@@ -2,14 +2,11 @@ import os
 import sys
 import time
 import shutil
+
 # 定義一個函數來清除終端屏幕
 def clear_screen():
-    # 對於Windows
-    if os.name == 'nt':
-        _ = os.system('cls')
-    # 對於mac和linux(here, os.name is 'posix')
-    else:
-        _ = os.system('clear')
+    command = 'cls' if os.name == 'nt' else 'clear'
+    os.system(command)
 import unicodedata
 def visual_length(s):
     return sum(2 if unicodedata.east_asian_width(c) in 'WF' else 1 for c in s)
@@ -34,15 +31,17 @@ def print_full_width(text, fill_char='_'):
     print(full_width_str)
 
 
-def update_terminal(player_list):
+def update_auto_start_terminal(player_list):
     clear_screen()
+    print_full_width("Mode: Auto Start")
+    print("")
     if not player_list:
-        print_full_width(" [No Player @_@] ")
+        print_full_width("[No Player @_@]", fill_char=' ')
     else:
         
         name_width = 15
         status_width = 8
-        print_full_width(f" Queue Waiting / number of player : {len(player_list)}  ")
+        print_full_width(f" Queue Waiting / number of player : {len(player_list)}  ", fill_char=' ')
         print("")
         for i in range(0, len(player_list), 3):
             players_in_row = player_list[i:i + 3]
@@ -56,4 +55,16 @@ def update_terminal(player_list):
             print(row_str)
     print("")
     print_full_width(f" [Press ESC to exit.] ")
-    sys.stdout.flush()
+
+wait_sign =[ "|", "/", "-", "\\"]
+wait_sign_idx = 0
+def waiting_for_accept(wait_time=0.5):
+    global wait_sign_idx
+    clear_screen()
+    print_full_width("Mode: Auto Accept")
+    print("")
+    print_full_width("Waiting for accept" + wait_sign[wait_sign_idx], fill_char=' ')
+    print("")
+    print_full_width(f" [Press ESC to exit.] ")
+    wait_sign_idx = (wait_sign_idx + 1) % 4
+    time.sleep(wait_time)
