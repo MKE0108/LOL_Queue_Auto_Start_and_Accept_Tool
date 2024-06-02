@@ -5,7 +5,7 @@ null
 
 
 # Qucik start
-Download [Release v1](https://github.com/MKE0108/LOL_QUICKPLAY_MODE_Auto_Start/releases )
+Download [Release v2](https://github.com/MKE0108/LOL_QUICKPLAY_MODE_Auto_Start/releases/tag/v2.0)
 
 
 # Edit and run code
