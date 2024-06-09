@@ -104,6 +104,7 @@ if(__name__=='__main__'):
                 #UI
                 waiting_for_accept()
                 if(compare_image(get_ac_crop(im),ac_image)):
+                    time.sleep(0.5)
                     touch("League of Legends",960/1920,820/1080)
                     current_mode = MODE.WAITING_ENTER_GAME
             if(current_mode == MODE.WAITING_ENTER_GAME):

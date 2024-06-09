@@ -82,6 +82,13 @@ def click_relative(window_title, relative_rx, relative_ry):
         pyautogui.click(x1+w*relative_rx, y1+h*relative_ry)
 
 def touch(windows,rx,ry):
-    bring_to_foreground_force(windows)
+    for i in range(10):
+        try:
+            bring_to_foreground_force(windows)
+            click_relative(windows,rx, ry)
+            break
+        except:
+            print(f"No window with title {windows} found.")
+            time.sleep(0.1)
     click_relative(windows,rx, ry)
 
