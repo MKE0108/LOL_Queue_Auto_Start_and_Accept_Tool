@@ -1,6 +1,6 @@
 # LOL QUICKPLAY MODE Auto Start
 # Demo Video
-null
+https://www.youtube.com/watch?v=WjQDGhxTeWM
 
 
 
